@@ -23,7 +23,7 @@ class Catalog(models.Model):
 
     book = models.ForeignKey('notebook.Book', on_delete=models.CASCADE)
 
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, default=None, null=True)
 
     class Meta:
         db_table = 'notebook_catalog'

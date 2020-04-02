@@ -1,3 +1,5 @@
+from django.conf import settings
+from redis import StrictRedis
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from PersonManage.role.models import Role
@@ -34,12 +36,17 @@ class RoleView(APIView):
                 role.name = name
             if describe := data.get('describe'):
                 role.describe = describe
-            if 'jurisdiction' in data:
+            if 'jurisdictions' in data:
+                redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                                    port=settings.DATABASES['redis']['PORT'],
+                                    db=settings.DATABASES['redis']['NAME_2'],
+                                    password=settings.DATABASES['redis']['PASS'])
+                redis.flushdb()
                 role.jurisdictions.clear()
-                if jurisdictions := data['jurisdictions']:
-                    jurs = Jurisdiction.objects.filter(pk__in=jurisdictions)
-                    for i in jurs:
-                        role.jurisdictions.add(i)
+                for i in data['jurisdictions']:
+                    print(i)
+                    jur = Jurisdiction.objects.filter(pk=i).first()
+                    role.jurisdictions.add(jur)
             role.save()
             return Response({'code': 200, 'msg': 'Update successful!', 'data': None})
         return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})

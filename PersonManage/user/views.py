@@ -1,3 +1,6 @@
+import hashlib
+from django.conf import settings
+from redis import StrictRedis
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from PersonManage.department.models import Department
@@ -22,10 +25,12 @@ class UserView(APIView):
     def post(self, request):
         try:
             user = User(username=request.data['username'],
-                        password=request.data['password'],
                         email=request.data.get('email', ''),
                         phone=request.data.get('phone', ''),
                         nickname=request.data.get('nickname', ''))
+            m = hashlib.md5()
+            m.update(request.data.get('password', '123456').encode('utf-8'))
+            user.password = m.hexdigest()
             if department := request.data.get('department'):
                 dept = Department.objects.filter(pk=department).first()
                 if dept:
@@ -80,6 +85,11 @@ class UserView(APIView):
             if nickname := data.get('nickname'):
                 user.nickname = nickname
             if 'jurisdiction' in data:
+                redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                                    port=settings.DATABASES['redis']['PORT'],
+                                    db=settings.DATABASES['redis']['NAME_2'],
+                                    password=settings.DATABASES['redis']['PASS'])
+                redis.flushdb()
                 user.jurisdiction.clear()
                 if jurisdiction := data['jurisdiction']:
                     jurs = Jurisdiction.objects.filter(pk__in=jurisdiction)

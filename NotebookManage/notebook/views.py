@@ -1,22 +1,18 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from NotebookManage.notebook.models import Book
 from NotebookManage.notebook.serializer import OneBook, ManyBook
-from PersonManage.department.models import Department
-from PersonManage.department.serializer import OneDepartment, ManyDepartment
-from PersonManage.jurisdiction.models import Jurisdiction
 
 
 class BookView(APIView):
     def get(self, request, id=None):
         if id:
-            if book := Book.objects.filter(pk=id).first():
+            if book := Book.objects.filter(pk=id, user=request.u).first():
                 data = OneBook(instance=book, many=False).data
                 return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
             return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
         else:
-            books = Book.objects.all()
+            books = Book.objects.filter(user=request.u)
             data = ManyBook(instance=books, many=True).data
             return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
 

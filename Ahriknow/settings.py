@@ -114,11 +114,18 @@ WSGI_APPLICATION = 'Ahriknow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ.get('HOST'),
-        'PORT': os.environ.get('PORT', '3306'),
-        'NAME': os.environ.get('NAME'),
-        'USER': os.environ.get('USER'),
-        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': os.environ.get('MYSQL_HOST'),
+        'PORT': os.environ.get('MYSQL_PORT'),
+        'NAME': os.environ.get('MYSQL_NAME'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASS'),
+    },
+    'redis': {
+        'HOST': os.environ.get('REDIS_HOST'),
+        'PORT': os.environ.get('REDIS_PORT'),
+        'PASS': os.environ.get('REDIS_PASS'),
+        'NAME_1': os.environ.get('REDIS_NAME_1'),
+        'NAME_2': os.environ.get('REDIS_NAME_2'),
     }
 }
 

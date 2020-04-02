@@ -1,3 +1,5 @@
+from django.conf import settings
+from redis import StrictRedis
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from PersonManage.department.models import Department
@@ -42,6 +44,11 @@ class DepartmentView(APIView):
             if parent := data.get('parent'):
                 dept.parent = Department.objects.filter(pk=parent).first()
             if 'jurisdictions' in data:
+                redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                                    port=settings.DATABASES['redis']['PORT'],
+                                    db=settings.DATABASES['redis']['NAME_2'],
+                                    password=settings.DATABASES['redis']['PASS'])
+                redis.flushdb()
                 dept.jurisdictions.clear()
                 for i in data['jurisdictions']:
                     jur = Jurisdiction.objects.filter(pk=i).first()
