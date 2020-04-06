@@ -59,19 +59,18 @@ class UserView(APIView):
 
     def put(self, request, id=None):
         if user := User.objects.filter(pk=id).first():
+            redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                                port=settings.DATABASES['redis']['PORT'],
+                                db=settings.DATABASES['redis']['NAME_2'],
+                                password=settings.DATABASES['redis']['PASS'])
             data = request.data
-            if department := data.get('department'):
-                dept = Department.objects.filter(pk=department).first()
-                if dept:
-                    user.department = dept
-                else:
-                    return Response({'code': 400, 'msg': "The 'department' does not exist!", 'data': None})
-            if role := data.get('role'):
-                r = Role.objects.filter(pk=role).first()
-                if r:
-                    user.role = r
-                else:
-                    return Response({'code': 400, 'msg': "The 'role' does not exist!", 'data': None})
+            if 'department' in data:
+                dept = Department.objects.filter(pk=data['department']).first()
+                user.department = dept
+            if 'role' in data:
+                redis.flushdb()
+                r = Role.objects.filter(pk=data['role']).first()
+                user.role = r
             if (activated := data.get('activated', '')) in [True, False]:
                 user.activated = activated
             if username := data.get('username'):
@@ -84,17 +83,12 @@ class UserView(APIView):
                 user.phone = phone
             if nickname := data.get('nickname'):
                 user.nickname = nickname
-            if 'jurisdiction' in data:
-                redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
-                                    port=settings.DATABASES['redis']['PORT'],
-                                    db=settings.DATABASES['redis']['NAME_2'],
-                                    password=settings.DATABASES['redis']['PASS'])
+            if 'jurisdictions' in data:
                 redis.flushdb()
-                user.jurisdiction.clear()
-                if jurisdiction := data['jurisdiction']:
-                    jurs = Jurisdiction.objects.filter(pk__in=jurisdiction)
-                    for i in jurs:
-                        user.jurisdiction.add(i)
+                user.jurisdictions.clear()
+                for i in data['jurisdictions']:
+                    jur = Jurisdiction.objects.filter(pk=i).first()
+                    user.jurisdictions.add(jur)
             if u := request.data.get('userinfo'):
                 userinfo = UserInfo.objects.filter(user=user).first()
                 if name := u.get('name'):

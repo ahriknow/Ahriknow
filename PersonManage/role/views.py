@@ -44,7 +44,6 @@ class RoleView(APIView):
                 redis.flushdb()
                 role.jurisdictions.clear()
                 for i in data['jurisdictions']:
-                    print(i)
                     jur = Jurisdiction.objects.filter(pk=i).first()
                     role.jurisdictions.add(jur)
             role.save()

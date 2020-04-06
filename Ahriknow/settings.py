@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
 
     'PersonManage.department.apps.DepartmentConfig',
     'PersonManage.jurisdiction.apps.JurisdictionConfig',
