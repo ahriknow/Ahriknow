@@ -39,11 +39,15 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
 
+    'Login.apps.LoginConfig',
     'PersonManage.department.apps.DepartmentConfig',
     'PersonManage.jurisdiction.apps.JurisdictionConfig',
     'PersonManage.role.apps.RoleConfig',
     'PersonManage.user.apps.UserConfig',
     'NotebookManage.notebook.apps.NotebookConfig',
+    'SettingManage.setting.apps.SettingConfig',
+
+    'SettingIndex.setting-index.apps.SettingConfig',
 ]
 
 MIDDLEWARE = [

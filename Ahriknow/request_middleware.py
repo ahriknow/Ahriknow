@@ -10,9 +10,7 @@ class RequestMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         if 'person' in request.path or 'notebook' in request.path:
-            if request.path == '/person/auth/' and request.method == "POST":
-                pass
-            else:
+            if request.path.startswith('/admin/'):
                 redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
                                     port=settings.DATABASES['redis']['PORT'],
                                     db=0,

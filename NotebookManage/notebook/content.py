@@ -18,7 +18,6 @@ class ContentView(APIView):
     def put(self, request, id=None):
         try:
             if content := Content.objects.filter(pk=id).first():
-                print(request.data)
                 if c := request.data.get('content'):
                     content.content = c
                 content.save()

@@ -18,7 +18,7 @@ class CatalogView(APIView):
             if request.data.get('parent'):
                 catalog.parent = Catalog.objects.filter(pk=request.data['parent']).first()
             catalog.save()
-            return Response({'code': 200, 'msg': 'Create successful!', 'data': None})
+            return Response({'code': 200, 'msg': 'Create successful!', 'data': catalog.id})
         except Exception as ex:
             return Response({'code': 500, 'msg': str(ex), 'data': None})
 

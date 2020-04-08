@@ -20,9 +20,10 @@ from .views import IndexView
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', IndexView.as_view()),
-    path('person/', include('PersonManage.department.urls')),
-    path('person/', include('PersonManage.jurisdiction.urls')),
-    path('person/', include('PersonManage.role.urls')),
-    path('person/', include('PersonManage.user.urls')),
-    path('notebook/', include('NotebookManage.notebook.urls')),
+    path('', include('Login.urls')),
+    path('admin/', include('PersonManage.urls')),
+    path('admin/', include('NotebookManage.urls')),
+    path('admin/', include('SettingManage.urls')),
+
+    path('index/', include('SettingIndex.urls')),
 ]
