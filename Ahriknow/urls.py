@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin/', include('NotebookManage.urls')),
     path('admin/', include('SettingManage.urls')),
 
+    path('index/', include('NotebookIndex.urls')),
     path('index/', include('SettingIndex.urls')),
 ]

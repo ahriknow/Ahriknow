@@ -12,7 +12,7 @@ class IndexShowView(APIView):
             index = Index(type='index-show')
             index.save()
             data = OneIndex(instance=index, many=False).data
-        return Response({'code': 200, 'msg': 'Update successful!', 'data': data})
+        return Response({'code': 200, 'msg': 'Query successful!', 'data': data})
 
     def put(self, request):
         if index := Index.objects.filter(type='index-show').first():

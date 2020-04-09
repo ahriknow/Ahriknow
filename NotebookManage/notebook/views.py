@@ -35,8 +35,8 @@ class BookView(APIView):
                 book.describe = describe
             if image := data.get('image'):
                 book.image = image
-            if public := data.get('public'):
-                book.public = public
+            if 'public' in data:
+                book.public = data.get('public')
             book.save()
             return Response({'code': 200, 'msg': 'Update successful!', 'data': None})
         return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
