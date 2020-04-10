@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
-from NotebookManage.notebook.models import Book, Catalog, Content
+from NotebookManage.notebook.models import Book, Catalog, Content, Tag
 
 
 class PageBook(PageNumberPagination):
@@ -15,6 +15,12 @@ class ManyBook(serializers.ModelSerializer):
 
     class Meta:
         model = Book
+        fields = '__all__'
+
+
+class ManyTag(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
         fields = '__all__'
 
 

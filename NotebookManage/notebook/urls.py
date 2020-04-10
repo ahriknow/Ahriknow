@@ -1,10 +1,12 @@
 from django.urls import path
-from . import views, catalog, content
+from . import views_book, views_catalog, views_content,views_tag
 
 urlpatterns = [
-    path('book/', views.BookView.as_view()),
-    path('book/<id>/', views.BookView.as_view()),
-    path('catalog/', catalog.CatalogView.as_view()),
-    path('catalog/<id>/', catalog.CatalogView.as_view()),
-    path('content/<id>/', content.ContentView.as_view()),
+    path('book/', views_book.BookView.as_view()),
+    path('book/<id>/', views_book.BookView.as_view()),
+    path('tag/', views_tag.TagView.as_view()),
+    path('tag/<id>/', views_tag.TagView.as_view()),
+    path('catalog/', views_catalog.CatalogView.as_view()),
+    path('catalog/<id>/', views_catalog.CatalogView.as_view()),
+    path('content/<id>/', views_content.ContentView.as_view()),
 ]

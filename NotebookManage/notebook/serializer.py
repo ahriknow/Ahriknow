@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from NotebookManage.notebook.models import Book, Catalog, Content
+from NotebookManage.notebook.models import Book, Catalog, Content, Tag
 
 
 class OneBook(serializers.ModelSerializer):
@@ -16,6 +16,12 @@ class ManyBook(serializers.ModelSerializer):
 
     class Meta:
         model = Book
+        fields = '__all__'
+
+
+class ManyTag(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
         fields = '__all__'
 
 

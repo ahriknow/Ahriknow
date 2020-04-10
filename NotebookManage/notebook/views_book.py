@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from NotebookManage.notebook.models import Book
+from NotebookManage.notebook.models import Book, Tag
 from NotebookManage.notebook.serializer import OneBook, ManyBook
 
 
@@ -22,6 +22,10 @@ class BookView(APIView):
                         public=request.data['public'])
             book.user = request.u
             book.save()
+            if 'tags' in request.data and len(request.data['tags']) > 0:
+                for i in request.data['tags']:
+                    tag = Tag.objects.filter(pk=i).first()
+                    book.tags.add(tag)
             return Response({'code': 200, 'msg': 'Create successful!', 'data': None})
         except Exception as ex:
             return Response({'code': 500, 'msg': str(ex), 'data': None})
@@ -37,6 +41,11 @@ class BookView(APIView):
                 book.image = image
             if 'public' in data:
                 book.public = data.get('public')
+            if 'tags' in data and len(data['tags']) > 0:
+                book.tags.clear()
+                for i in data['tags']:
+                    tag = Tag.objects.filter(pk=i).first()
+                    book.tags.add(tag)
             book.save()
             return Response({'code': 200, 'msg': 'Update successful!', 'data': None})
         return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})

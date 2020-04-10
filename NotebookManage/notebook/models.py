@@ -12,9 +12,20 @@ class Book(models.Model):
 
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
+    tags = models.ManyToManyField('notebook.Tag')
+
     class Meta:
         db_table = 'notebook_book'
         ordering = ['id']
+
+
+class Tag(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'notebook_tag'
 
 
 class Catalog(models.Model):
