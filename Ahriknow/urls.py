@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin/', include('PersonManage.urls')),
     path('admin/', include('NotebookManage.urls')),
     path('admin/', include('SettingManage.urls')),
+    path('admin/', include('DatabaseManage.urls')),
+    path('admin/', include('RestapiManage.urls')),
 
     path('index/', include('NotebookIndex.urls')),
     path('index/', include('SettingIndex.urls')),
