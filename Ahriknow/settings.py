@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'SettingManage.setting.apps.SettingConfig',
     'DatabaseManage.database.apps.DatabaseConfig',
     'RestapiManage.restapi.apps.RestapiConfig',
+    'BlogManage.blog.apps.BlogConfig',
 
     'NotebookIndex.notebook_index.apps.NotebookConfig',
     'SettingIndex.setting-index.apps.SettingConfig',

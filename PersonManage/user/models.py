@@ -13,8 +13,8 @@ class User(models.Model):
     last_login = models.DateTimeField(null=True)
 
     department = models.ForeignKey('department.Department', null=True, default=None, on_delete=models.SET_DEFAULT)
-    role = models.ForeignKey('role.Role', null=True, default=None, on_delete=models.SET_DEFAULT)
 
+    roles = models.ManyToManyField('role.Role', related_name='u_roles')
     jurisdictions = models.ManyToManyField('jurisdiction.Jurisdiction', related_name='u_jurisdictions')
 
     class Meta:

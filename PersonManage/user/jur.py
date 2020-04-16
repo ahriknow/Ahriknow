@@ -24,12 +24,13 @@ class JurView(APIView):
                     while i := i.parent:
                         if i.identity not in data:
                             data.append(i.identity)
-            if user.role:
-                for i in user.role.jurisdictions.all():
-                    data.append(i.identity)
-                    while i := i.parent:
-                        if i.identity not in data:
-                            data.append(i.identity)
+            if user.roles:
+                for i in user.roles.all():
+                    for j in i.jurisdictions.all():
+                        data.append(j.identity)
+                        while j := j.parent:
+                            if j.identity not in data:
+                                data.append(j.identity)
             for i in user.jurisdictions.all():
                 data.append(i.identity)
                 while i := i.parent:

@@ -73,11 +73,10 @@ class Connect:
                 'date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                 'database': db,
                 'username': name,
-                'password': password,
-                'user': ''
+                'password': password
             }
             conn[db]['version'].insert_one(info)
-            result = conn[db].command('createUser', name, pwd=password, roles=["dbAdmin"])
+            result = conn[db].command('createUser', name, pwd=password, roles=["readWrite"])
             return True if 'ok' in result else False
         elif t == 'mysql':
             mysql = MySQLdb.connect(host=self.server, user="root", password=self.mysql_password, port=3306,

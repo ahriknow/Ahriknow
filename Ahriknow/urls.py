@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', include('SettingManage.urls')),
     path('admin/', include('DatabaseManage.urls')),
     path('admin/', include('RestapiManage.urls')),
+    path('admin/', include('BlogManage.urls')),
 
     path('index/', include('NotebookIndex.urls')),
     path('index/', include('SettingIndex.urls')),

@@ -35,11 +35,11 @@ class UserView(APIView):
                 dept = Department.objects.filter(pk=department).first()
                 if dept:
                     user.department = dept
-            if role := request.data.get('role'):
-                r = Role.objects.filter(pk=role).first()
-                if r:
-                    user.role = r
             user.save()
+            if 'roles' in request.data:
+                rs = Role.objects.filter(pk__in=request.data['roles'])
+                for i in rs:
+                    user.roles.add(i)
             userinfo = UserInfo(user=user)
             if u := request.data.get('userinfo'):
                 if name := u.get('name'):
@@ -67,16 +67,20 @@ class UserView(APIView):
             if 'department' in data:
                 dept = Department.objects.filter(pk=data['department']).first()
                 user.department = dept
-            if 'role' in data:
+            if 'roles' in data:
                 redis.flushdb()
-                r = Role.objects.filter(pk=data['role']).first()
-                user.role = r
+                user.roles.clear()
+                rs = Role.objects.filter(pk__in=data['roles'])
+                for i in rs:
+                    user.roles.add(i)
             if (activated := data.get('activated', '')) in [True, False]:
                 user.activated = activated
             if username := data.get('username'):
                 user.username = username
             if password := data.get('password'):
-                user.password = password
+                m = hashlib.md5()
+                m.update(password.encode('utf-8'))
+                user.password = m.hexdigest()
             if email := data.get('email'):
                 user.email = email
             if phone := data.get('phone'):
