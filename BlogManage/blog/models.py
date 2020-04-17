@@ -5,7 +5,7 @@ class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=254)
     describe = models.TextField()
-    allowed = models.BooleanField(default=False)
+    image = models.CharField(max_length=254, default='')
     date = models.DateTimeField(auto_now_add=True)
 
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
@@ -17,28 +17,32 @@ class Category(models.Model):
 class Tag(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=254)
+    weight = models.SmallIntegerField(default=1)
     date = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey('user.User', on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, default=None, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'blog_tag'
+        ordering = ['weight']
 
 
 class Article(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=254)
+    describe = models.TextField()
+    image = models.CharField(max_length=254, default='')
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
     editor = models.CharField(max_length=100, default='markdown')
     content_md = models.TextField()
     content_html = models.TextField()
     type = models.SmallIntegerField(default=1)
-    comment = models.BooleanField(default=True)
-    publish = models.BooleanField(default=False)
+    commented = models.BooleanField(default=True)
+    published = models.BooleanField(default=False)
+    draft = models.BooleanField(default=False)
     removed = models.BooleanField(default=False)
-    public = models.BooleanField(default=True)
+    level = models.SmallIntegerField(default=1)
 
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     category = models.ForeignKey('blog.Category', on_delete=models.CASCADE)
@@ -51,11 +55,11 @@ class Article(models.Model):
 class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
     date = models.DateTimeField(auto_now_add=True)
-    content_md = models.TextField()
+    content = models.TextField()
 
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     article = models.ForeignKey('blog.Article', on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, default=None, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'blog_comment'
