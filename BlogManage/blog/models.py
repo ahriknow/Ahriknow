@@ -1,6 +1,17 @@
 from django.db import models
 
 
+class Tab(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=254)
+    index = models.SmallIntegerField(default=1)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'blog_tab'
+        ordering = ['index']
+
+
 class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=254)
@@ -34,12 +45,11 @@ class Article(models.Model):
     image = models.CharField(max_length=254, default='')
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
-    editor = models.CharField(max_length=100, default='markdown')
-    content_md = models.TextField()
-    content_html = models.TextField()
+    content = models.TextField()
     type = models.SmallIntegerField(default=1)
+    link = models.CharField(max_length=254, default='')
     commented = models.BooleanField(default=True)
-    published = models.BooleanField(default=False)
+    top = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
     removed = models.BooleanField(default=False)
     level = models.SmallIntegerField(default=1)
@@ -47,9 +57,11 @@ class Article(models.Model):
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     category = models.ForeignKey('blog.Category', on_delete=models.CASCADE)
     tags = models.ManyToManyField('blog.Tag', related_name='art_tags')
+    tab = models.ForeignKey('blog.Tab', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'blog_article'
+        ordering = ['-update']
 
 
 class Comment(models.Model):
@@ -63,3 +75,4 @@ class Comment(models.Model):
 
     class Meta:
         db_table = 'blog_comment'
+        ordering = ['-date']

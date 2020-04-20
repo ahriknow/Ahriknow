@@ -5,6 +5,7 @@ class User(models.Model):
     id = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=254, unique=True)
     password = models.CharField(max_length=254)
+    avatar = models.CharField(max_length=254, default='http://ahriknow.oss-cn-beijing.aliyuncs.com/avatar.jpg')
     activated = models.BooleanField(default=True)
     email = models.EmailField()
     phone = models.CharField(max_length=20)

@@ -35,6 +35,9 @@ class UserView(APIView):
                 dept = Department.objects.filter(pk=department).first()
                 if dept:
                     user.department = dept
+            if not user.department:
+                dept = Department.objects.filter(name='default').first()
+                user.department = dept
             user.save()
             if 'roles' in request.data:
                 rs = Role.objects.filter(pk__in=request.data['roles'])

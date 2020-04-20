@@ -4,7 +4,7 @@ from BlogManage.blog.models import Article, Comment
 from BlogManage.blog.serializer import OneComment, ManyComment
 
 
-class CategoryView(APIView):
+class CommentView(APIView):
     def get(self, request, id=None):
         if id:
             if article := Article.objects.filter(pk=id).first():
@@ -12,15 +12,17 @@ class CategoryView(APIView):
                 data = ManyComment(instance=comment, many=True).data
                 return Response({'code': 200, 'msg': 'Create successful!', 'data': data})
             return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
-        comment = Comment.objects.all()
-        data = ManyComment(instance=comment, many=True).data
-        return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
+        if request.u.username == 'ahriknow':
+            comment = Comment.objects.all()
+            data = ManyComment(instance=comment, many=True).data
+            return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
+        return Response({'code': 400, 'msg': 'Error param', 'data': None})
 
     def post(self, request):
         try:
             article = Article.objects.filter(pk=request.data['article']).first()
             com = None
-            if c := Comment.objects.filter(article=article):
+            if c := Comment.objects.filter(pk=request.data['parent']).first():
                 com = c
             comment = Comment(content=request.data['content'], user=request.u,
                               article=article, parent=com)

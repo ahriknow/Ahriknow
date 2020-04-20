@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'RestapiManage.restapi.apps.RestapiConfig',
     'BlogManage.blog.apps.BlogConfig',
 
+    'BlogIndex.blog_index.apps.BlogIndexConfig',
     'NotebookIndex.notebook_index.apps.NotebookConfig',
     'SettingIndex.setting-index.apps.SettingConfig',
 ]
@@ -123,16 +124,11 @@ WSGI_APPLICATION = 'Ahriknow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'HOST': os.environ.get('MYSQL_HOST'),
-        # 'PORT': os.environ.get('MYSQL_PORT'),
-        # 'NAME': os.environ.get('MYSQL_NAME'),
-        # 'USER': os.environ.get('MYSQL_USER'),
-        # 'PASSWORD': os.environ.get('MYSQL_PASS'),
-        'HOST': '39.99.214.102',
-        'PORT': '3306',
-        'NAME': 'ahriknow',
-        'USER': 'root',
-        'PASSWORD': 'Aa12345.',
+        'HOST': os.environ.get('MYSQL_HOST'),
+        'PORT': os.environ.get('MYSQL_PORT'),
+        'NAME': os.environ.get('MYSQL_NAME'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASS'),
     },
     'redis': {
         'HOST': os.environ.get('REDIS_HOST'),

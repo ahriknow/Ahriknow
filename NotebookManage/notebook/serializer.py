@@ -1,5 +1,11 @@
 from rest_framework import serializers
+from rest_framework.pagination import PageNumberPagination
+
 from NotebookManage.notebook.models import Book, Catalog, Content, Tag
+
+
+class PageBook(PageNumberPagination):
+    page_size = 2
 
 
 class OneBook(serializers.ModelSerializer):

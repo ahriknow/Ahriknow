@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', include('RestapiManage.urls')),
     path('admin/', include('BlogManage.urls')),
 
+    path('index/', include('BlogIndex.urls')),
     path('index/', include('NotebookIndex.urls')),
     path('index/', include('SettingIndex.urls')),
 ]
