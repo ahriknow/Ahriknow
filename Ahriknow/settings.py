@@ -129,6 +129,11 @@ DATABASES = {
         'NAME': os.environ.get('MYSQL_NAME'),
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASS'),
+        # 'HOST': '39.99.214.102',
+        # 'PORT': '3306',
+        # 'NAME': 'ahriknow',
+        # 'USER': 'root',
+        # 'PASSWORD': 'Aa12345.',
     },
     'redis': {
         'HOST': os.environ.get('REDIS_HOST'),

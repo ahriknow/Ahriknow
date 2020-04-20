@@ -3,6 +3,11 @@ from PersonManage.user.models import User, UserInfo
 
 
 class OneUser(serializers.ModelSerializer):
+    password = serializers.SerializerMethodField()
+
+    def get_password(self, row):
+        return ''
+
     class Meta:
         model = User
         fields = '__all__'
@@ -11,6 +16,8 @@ class OneUser(serializers.ModelSerializer):
 class ManyUser(serializers.ModelSerializer):
     userinfo = serializers.SerializerMethodField()
     password = serializers.SerializerMethodField()
+    create_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M", required=False, read_only=True)
+    last_login = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
 
     def get_userinfo(self, row):
         ui = UserInfo.objects.filter(user=row).first()

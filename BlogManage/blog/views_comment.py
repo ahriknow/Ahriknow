@@ -1,22 +1,35 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from BlogManage.blog.models import Article, Comment
-from BlogManage.blog.serializer import OneComment, ManyComment
+from BlogManage.blog.serializer import OneComment, ManyComment, PageComment
 
 
 class CommentView(APIView):
-    def get(self, request, id=None):
+    def get(self, request):
+        id = request.query_params.get('id')
         if id:
-            if article := Article.objects.filter(pk=id).first():
-                comment = Comment.objects.filter(article=article)
-                data = ManyComment(instance=comment, many=True).data
-                return Response({'code': 200, 'msg': 'Create successful!', 'data': data})
-            return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
-        if request.u.username == 'ahriknow':
-            comment = Comment.objects.all()
-            data = ManyComment(instance=comment, many=True).data
-            return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
-        return Response({'code': 400, 'msg': 'Error param', 'data': None})
+            if request.u.username == 'ahriknow':
+                article = Article.objects.filter(pk=id, removed=False).first()
+            else:
+                article = Article.objects.filter(user=request.u, pk=id, removed=False).first()
+            comments = Comment.objects.filter(article=article)
+        else:
+            f = request.query_params.get('from')
+            t = request.query_params.get('to')
+            if request.u.username == 'ahriknow':
+                articles = Article.objects.filter(removed=False)
+            else:
+                articles = Article.objects.filter(user=request.u, removed=False)
+            if f and t:
+                articles = articles.filter(update__range=[f, t], removed=False)
+            if title := request.query_params.get('article'):
+                articles = articles.filter(title__icontains=title, removed=False)
+            comments = Comment.objects.filter(article__in=articles)
+        pg = PageComment()
+        pgs = pg.paginate_queryset(queryset=comments, request=request, view=self)
+        data = ManyComment(instance=pgs, many=True).data
+        res = pg.get_paginated_response(data)
+        return res
 
     def post(self, request):
         try:

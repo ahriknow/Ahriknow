@@ -6,7 +6,7 @@ from BlogIndex.blog_index.serializer import OneArticle, ManyArticle, PageArticle
 
 class ArticleView(APIView):
     def get_article_default(self, request):
-        articles = Article.objects.filter(removed=False)
+        articles = Article.objects.filter(removed=False, draft=False)
         pg = PageArticle()
         pgs = pg.paginate_queryset(queryset=articles, request=request, view=self)
         data = ManyArticle(instance=pgs, many=True).data

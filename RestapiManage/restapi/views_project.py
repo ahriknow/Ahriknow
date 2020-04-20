@@ -1,5 +1,6 @@
 import hashlib
 import time
+import pymongo
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from RestapiManage.restapi.models import Project
@@ -7,6 +8,12 @@ from RestapiManage.restapi.serializer import ManyProject
 
 
 class ProjectView(APIView):
+    server = '39.99.214.102'
+    mongo_password = 'Aa12345.'
+    mongo = f'mongodb://root:{mongo_password}@{server}:27017/'
+    conn = pymongo.MongoClient(mongo)
+    db = conn['restapi']
+
     def get(self, request):
         projects = Project.objects.filter(user=request.u)
         data = ManyProject(instance=projects, many=True).data
@@ -29,6 +36,7 @@ class ProjectView(APIView):
 
     def delete(self, request, id=None):
         if project := Project.objects.filter(pk=id).first():
+            self.db['url'].delete_many({'auth': project.auth})
             project.delete()
             return Response({'code': 200, 'msg': 'Delete successful!'})
         return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
