@@ -24,6 +24,8 @@ class UserView(APIView):
 
     def post(self, request):
         try:
+            if User.objects.filter(username=request.data['username']):
+                return Response({'code': 400, 'msg': '用户名重复', 'data': None})
             user = User(username=request.data['username'],
                         email=request.data.get('email', ''),
                         phone=request.data.get('phone', ''),
@@ -35,9 +37,6 @@ class UserView(APIView):
                 dept = Department.objects.filter(pk=department).first()
                 if dept:
                     user.department = dept
-            if not user.department:
-                dept = Department.objects.filter(name='default').first()
-                user.department = dept
             user.save()
             if 'roles' in request.data:
                 rs = Role.objects.filter(pk__in=request.data['roles'])
@@ -56,8 +55,6 @@ class UserView(APIView):
             userinfo.save()
             return Response({'code': 200, 'msg': 'Create successful!', 'data': None})
         except Exception as ex:
-            if 'UNIQUE' in str(ex):
-                return Response({'code': 400, 'msg': 'Data duplication!', 'data': None})
             return Response({'code': 500, 'msg': str(ex), 'data': None})
 
     def put(self, request, id=None):

@@ -2,7 +2,6 @@ import hashlib
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from PersonManage.department.models import Department
-from PersonManage.role.models import Role
 from PersonManage.user.models import User, UserInfo
 
 
@@ -16,14 +15,8 @@ class UserView(APIView):
             m = hashlib.md5()
             m.update(request.data.get('password', '123456').encode('utf-8'))
             user.password = m.hexdigest()
-            if department := request.data.get('department'):
-                dept = Department.objects.filter(pk=department).first()
-                if dept:
-                    user.department = dept
-            if role := request.data.get('role'):
-                r = Role.objects.filter(pk=role).first()
-                if r:
-                    user.role = r
+            dept = Department.objects.filter(name='default').first()
+            user.department = dept
             user.save()
             userinfo = UserInfo(user=user)
             if u := request.data.get('userinfo'):

@@ -124,23 +124,18 @@ WSGI_APPLICATION = 'Ahriknow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ.get('MYSQL_HOST'),
-        'PORT': os.environ.get('MYSQL_PORT'),
-        'NAME': os.environ.get('MYSQL_NAME'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASS'),
-        # 'HOST': '39.99.214.102',
-        # 'PORT': '3306',
-        # 'NAME': 'ahriknow',
-        # 'USER': 'root',
-        # 'PASSWORD': 'Aa12345.',
+        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
+        'NAME': os.environ.get('MYSQL_NAME', 'ahriknow'),
+        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASS', 'password'),
     },
     'redis': {
-        'HOST': os.environ.get('REDIS_HOST'),
-        'PORT': os.environ.get('REDIS_PORT'),
-        'PASS': os.environ.get('REDIS_PASS'),
-        'NAME_1': os.environ.get('REDIS_NAME_1'),
-        'NAME_2': os.environ.get('REDIS_NAME_2'),
+        'HOST': os.environ.get('REDIS_HOST', 'localhost'),
+        'PORT': os.environ.get('REDIS_PORT', '6379'),
+        'PASS': os.environ.get('REDIS_PASS', 'password'),
+        'NAME_1': os.environ.get('REDIS_NAME_1', '0'),
+        'NAME_2': os.environ.get('REDIS_NAME_2', '1'),
     }
 }
 
