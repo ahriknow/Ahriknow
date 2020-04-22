@@ -136,6 +136,7 @@ DATABASES = {
         'PASS': os.environ.get('REDIS_PASS', 'password'),
         'NAME_1': os.environ.get('REDIS_NAME_1', '0'),
         'NAME_2': os.environ.get('REDIS_NAME_2', '1'),
+        'NAME_3': os.environ.get('REDIS_NAME_3', '2'),
     }
 }
 

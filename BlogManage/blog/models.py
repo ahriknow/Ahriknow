@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from redis import StrictRedis
 
 
 class Tab(models.Model):
@@ -76,3 +78,68 @@ class Comment(models.Model):
     class Meta:
         db_table = 'blog_comment'
         ordering = ['-date']
+
+
+class Follow:
+    redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                        port=settings.DATABASES['redis']['PORT'],
+                        db=settings.DATABASES['redis']['NAME_3'],
+                        password=settings.DATABASES['redis']['PASS'],
+                        decode_responses=True)
+
+    def follow(self, who, what):
+        self.redis.sadd(f'{str(who)}:follows', str(what))
+        self.redis.sadd(f'{str(what)}:fans', str(who))
+
+    def rem(self, who, what):
+        self.redis.srem(f'{str(who)}:follows', str(what))
+        self.redis.srem(f'{str(what)}:fans', str(who))
+
+    def is_fan(self, who, what):
+        if self.redis.sismember(f'{str(who)}:follows', str(what)):
+            return True
+        return False
+
+    def my_follow(self, who):
+        return self.redis.smembers(f'{str(who)}:follows')
+
+    def t_fans(self, what):
+        return self.redis.smembers(f'{str(what)}:fans')
+
+
+class Fabulous:
+    redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                        port=settings.DATABASES['redis']['PORT'],
+                        db=settings.DATABASES['redis']['NAME_3'],
+                        password=settings.DATABASES['redis']['PASS'],
+                        decode_responses=True)
+
+    def fabulous(self, who, what):
+        self.redis.sadd(f'{str(what)}:fabulous', str(who))
+
+    def rem(self, who, what):
+        self.redis.srem(f'{str(what)}:fabulous', str(who))
+
+    def is_fabulous(self, who, what):
+        if self.redis.sismember(f'{str(what)}:fabulous', str(who)):
+            return True
+        return False
+
+    def a_fabulous(self, what):
+        return self.redis.smembers(f'{str(what)}:fabulous')
+
+
+class View:
+    redis = StrictRedis(host=settings.DATABASES['redis']['HOST'],
+                        port=settings.DATABASES['redis']['PORT'],
+                        db=settings.DATABASES['redis']['NAME_3'],
+                        password=settings.DATABASES['redis']['PASS'],
+                        decode_responses=True)
+
+    def view(self, who, what):
+        if self.redis.sismember(f'{str(what)}:views', str(who)):
+            return
+        self.redis.sadd(f'{str(what)}:views', str(who))
+
+    def a_views(self, what):
+        return self.redis.smembers(f'{str(what)}:views')

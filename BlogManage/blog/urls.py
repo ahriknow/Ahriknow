@@ -1,5 +1,6 @@
 from django.urls import path
-from . import views_tab, views_category, views_tag, views_upload, views_article, views_comment
+from . import views_tab, views_category, views_tag, views_upload, views_article, views_comment, views_follow, \
+    views_fabulous
 
 urlpatterns = [
     path('category/', views_category.CategoryView.as_view()),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('article/<id>/', views_article.ArticleView.as_view()),
     path('comment/', views_comment.CommentView.as_view()),
     path('comment/<id>/', views_comment.CommentView.as_view()),
+    path('follow/', views_follow.FollowView.as_view()),
+    path('fabulous/', views_fabulous.FabulousView.as_view()),
 ]
