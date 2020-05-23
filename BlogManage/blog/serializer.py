@@ -71,7 +71,7 @@ class ManyArticle(serializers.ModelSerializer):
 
 class ManyComment(serializers.ModelSerializer):
     article = serializers.SerializerMethodField()
-    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M", required=False, read_only=True)
+    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
 
     def get_article(self, row):
         return row.article.title
@@ -82,6 +82,12 @@ class ManyComment(serializers.ModelSerializer):
 
 
 class OneComment(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
+
+    def get_user(self, row):
+        return {'avatar': row.user.avatar, 'nickname': row.user.nickname}
+
     class Meta:
         model = Comment
         fields = '__all__'

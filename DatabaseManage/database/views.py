@@ -11,7 +11,10 @@ import pymongo
 
 class DatabaseView(APIView):
     def get(self, request):
-        dbs = Database.objects.filter(user=request.u)
+        if request.u.username == 'ahriknow':
+            dbs = Database.objects.all()
+        else:
+            dbs = Database.objects.filter(user=request.u)
         data = OneDatabase(instance=dbs, many=True).data
         return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
 

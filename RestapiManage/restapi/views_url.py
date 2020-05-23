@@ -13,8 +13,12 @@ class UrlView(APIView):
     conn = pymongo.MongoClient(mongo)
     db = conn['restapi']
 
-    def get(self, request):
-        urls = Url.objects.filter(user=request.u)
+    def get(self, request, id=None):
+        p = Project.objects.filter(pk=id).first()
+        if request.u.username == 'ahriknow':
+            urls = Url.objects.filter(project=p)
+        else:
+            urls = Url.objects.filter(user=request.u, project=p)
         data = ManyUrl(instance=urls, many=True).data
         return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
 

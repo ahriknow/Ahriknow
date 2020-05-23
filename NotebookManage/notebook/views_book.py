@@ -7,12 +7,19 @@ from NotebookManage.notebook.serializer import OneBook, ManyBook
 class BookView(APIView):
     def get(self, request, id=None):
         if id:
-            if book := Book.objects.filter(pk=id, user=request.u).first():
+            if request.u.username == 'ahriknow':
+                book = Book.objects.filter(pk=id).first()
+            else:
+                book = Book.objects.filter(pk=id, user=request.u).first()
+            if book:
                 data = OneBook(instance=book, many=False).data
                 return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
             return Response({'code': 400, 'msg': 'Data does not exist!', 'data': None})
         else:
-            books = Book.objects.filter(user=request.u)
+            if request.u.username == 'ahriknow':
+                books = Book.objects.all()
+            else:
+                books = Book.objects.filter(user=request.u)
             data = ManyBook(instance=books, many=True).data
             return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
 

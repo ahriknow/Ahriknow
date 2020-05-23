@@ -26,4 +26,6 @@ class RequestMiddleware(MiddlewareMixin):
             pass
 
     def process_response(self, request, response):
+        if response.status_code == 404:
+            return JsonResponse({'code': 404, 'msg': '404', 'data': None})
         return response

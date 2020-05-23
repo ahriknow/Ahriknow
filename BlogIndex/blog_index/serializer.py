@@ -88,6 +88,7 @@ class ManyTab(serializers.ModelSerializer):
 
 class ManyComment(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
+    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
 
     def get_user(self, row):
         return {'avatar': row.user.avatar, 'nickname': row.user.nickname}

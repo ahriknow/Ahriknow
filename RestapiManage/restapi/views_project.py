@@ -15,7 +15,10 @@ class ProjectView(APIView):
     db = conn['restapi']
 
     def get(self, request):
-        projects = Project.objects.filter(user=request.u)
+        if request.u.username == 'ahriknow':
+            projects = Project.objects.all()
+        else:
+            projects = Project.objects.filter(user=request.u)
         data = ManyProject(instance=projects, many=True).data
         return Response({'code': 200, 'msg': 'Query was successful!', 'data': data})
 
